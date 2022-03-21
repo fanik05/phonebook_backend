@@ -6,7 +6,11 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build:ui": "rm -rf build && cd ../part2-notes/ && yarn build && cp -r build ../notes-backend",
+    "deploy": "git push heroku main",
+    "deploy:full": "yarn build:ui && git add . && git commit -m uibuild && git push && yarn deploy",    
+    "logs:prod": "heroku logs --tail"
   },
   "engines": {
     "node": "16.x"
