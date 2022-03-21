@@ -27,11 +27,20 @@ let persons = [
 ]
 
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+  response.json(persons)
+})
+
+app.get('/info', (request, response) => {
+  const info = `
+    <div>Phonebook has info for ${persons.length} prople</div>
+    <br>
+    <div>${new Date()}</div>
+  `
+  response.send(info)
 })
 
 const PORT = 3001
 
 app.listen(PORT, () => {
-    console.log(`Server started at port ${PORT}`)
+  console.log(`Server started at port ${PORT}`)
 })
