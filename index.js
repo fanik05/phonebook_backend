@@ -1,3 +1,5 @@
+const { response } = require('express')
+const { request } = require('express')
 const express = require('express')
 const app = express()
 
@@ -53,6 +55,44 @@ app.delete('/api/persons/:id', (request, response) => {
   persons = persons.filter(person => person.id !== id)
 
   response.status(204).end()
+})
+
+const generateRandomId = () => {
+  const randomId = () => Math.floor(Math.random() * (100000000 - 1) + 1)
+  let id = randomId()
+  const ids = persons.map(person => person.id)
+
+  while (ids.includes(id)) {
+    id = randomId()
+  }
+
+  return id
+}
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: 'name or number is missing',
+    })
+  }
+
+  if (persons.map(person => person.name).includes(body.name)) {
+    return response.status(400).json({
+      error: 'name must be unique',
+    })
+  }
+
+  const person = {
+    id: generateRandomId(),
+    name: body.name,
+    number: body.number,
+  }
+
+  persons = persons.concat(person)
+
+  response.json(person)
 })
 
 const PORT = 3001
