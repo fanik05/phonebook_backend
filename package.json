@@ -4,6 +4,10 @@
   "main": "index.js",
   "author": "Fatin Noor Anik",
   "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
   "dependencies": {
     "express": "^4.17.3"
   },
