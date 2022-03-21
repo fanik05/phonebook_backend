@@ -7,9 +7,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "build:ui": "rm -rf build && cd ../part2-notes/ && yarn build && cp -r build ../notes-backend",
-    "deploy": "git push heroku main",
-    "deploy:full": "yarn build:ui && git add . && git commit -m uibuild && git push && yarn deploy",    
+    "build:ui": "rm -rf build && cd ../phonebook/ && yarn build && cp -r build ../phonebook_backend",
+    "deploy": "git push",
+    "deploy:full": "yarn build:ui && git add . && git commit -m uibuild && yarn deploy",    
     "logs:prod": "heroku logs --tail"
   },
   "engines": {
