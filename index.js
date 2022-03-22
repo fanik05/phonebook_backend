@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
-const Contact = require('./models/contact')
+const Person = require('./models/person')
 
 const app = express()
 
@@ -18,7 +18,7 @@ app.use(
 app.use(express.static('build'))
 
 app.get('/api/persons', (request, response) =>
-  Contact.find({}).then(contacts => response.json(contacts))
+  Person.find({}).then(persons => response.json(persons))
 )
 
 app.get('/info', (request, response) => {
@@ -31,7 +31,7 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  Contact.findById(request.params.id).then(contact => response.json(contact))
+  Person.findById(request.params.id).then(person => response.json(person))
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -40,18 +40,6 @@ app.delete('/api/persons/:id', (request, response) => {
 
   response.status(204).end()
 })
-
-const generateRandomId = () => {
-  const randomId = () => Math.floor(Math.random() * (100000000 - 1) + 1)
-  let id = randomId()
-  const ids = persons.map(person => person.id)
-
-  while (ids.includes(id)) {
-    id = randomId()
-  }
-
-  return id
-}
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
@@ -62,21 +50,20 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  if (persons.map(person => person.name).includes(body.name)) {
-    return response.status(400).json({
-      error: 'name must be unique',
-    })
-  }
+  Person.find({}).then(persons => {
+    if (persons.map(person => person.name).includes(body.name)) {
+      return response.status(400).json({
+        error: 'name must be unique',
+      })
+    }
+  })
 
-  const person = {
-    id: generateRandomId(),
+  const person = new Person({
     name: body.name,
     number: body.number,
-  }
+  })
 
-  persons = persons.concat(person)
-
-  response.json(person)
+  person.save().then(returnedPerson => response.json(returnedPerson))
 })
 
 const unknownEndpoint = (request, response) => {

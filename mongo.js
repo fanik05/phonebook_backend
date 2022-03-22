@@ -13,16 +13,24 @@ const url = `mongodb+srv://fullstack:${password}@cluster0.g5cxj.mongodb.net/phon
 
 mongoose.connect(url)
 
-const phonebookSchema = new mongoose.Schema({
+const personSchema = new mongoose.Schema({
   name: String,
   number: String,
 })
 
-const Contact = mongoose.model('Contact', phonebookSchema)
+personSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  },
+})
+
+const Person = mongoose.model('Person', personSchema)
 
 if (process.argv.length === 3) {
   console.log('phonebook:')
-  Contact.find({}).then(results => {
+  Person.find({}).then(results => {
     results.forEach(result => {
       console.log(`${result.name} ${result.number}`)
     })
@@ -33,9 +41,9 @@ if (process.argv.length === 3) {
 if (process.argv.length === 5) {
   const name = process.argv[3]
   const number = process.argv[4]
-  const contact = new Contact({ name: name, number: number })
+  const person = new Person({ name: name, number: number })
 
-  contact.save().then(result => {
+  person.save().then(result => {
     console.log(`added ${result.name} number ${result.number} to phonebook`)
     mongoose.connection.close()
   })
