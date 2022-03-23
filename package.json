@@ -10,7 +10,8 @@
     "build:ui": "rm -rf build && cd ../phonebook/ && yarn build && cp -r build ../phonebook_backend",
     "deploy": "git push heroku main",
     "deploy:full": "yarn build:ui && git add . && git commit -m uibuild && git push && yarn deploy",
-    "logs:prod": "heroku logs --tail"
+    "logs:prod": "heroku logs --tail",
+    "lint": "eslint ."
   },
   "engines": {
     "node": "16.x"
@@ -22,6 +23,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "eslint": "^8.11.0",
     "nodemon": "^2.0.15"
   }
 }
