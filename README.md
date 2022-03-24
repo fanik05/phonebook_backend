@@ -1,3 +1,3 @@
 # Phonebook Express App 
 
-The server is deployed (here)[https://phonebook-backend-fanik.herokuapp.com]
+The server is deployed [here](https://phonebook-backend-fanik.herokuapp.com)
